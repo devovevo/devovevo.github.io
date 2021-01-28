@@ -6,7 +6,7 @@ class NoteRecognizer
     bufferLength = null;
     sampleRate = null;
 
-    MusicNote = class
+    MusicNote = class MusicNote
     {
         note = "";
         octave = "";
@@ -81,8 +81,15 @@ class NoteRecognizer
     }
 
     frequencies = [];
+
+    decibelSum = 0;
+    decibelCount = 0;
+
+    letters = [];
+    octaves = [];
+
     timer = 200;
-    delay = 2;
+    delay = 10;
     times = 0;
 
     async recognizeNotes()
@@ -95,50 +102,44 @@ class NoteRecognizer
             recognizer.times++;
 
             recognizer.audioAnalyzer.getFloatFrequencyData(dataArray);
-            var max = dataArray[0];
-            var frequencyFraction = 0;
 
-            for (var i = 0; i < dataArray.length; i++)
-            {
-                if (dataArray[i] > max)
-                {
-                    max = dataArray[i];
-                    frequencyFraction = i;
-                }
-            }
+            var largest = recognizer.largestNum(dataArray);
+            var max = largest.max;
+            var frequencyFraction = largest.index;
 
             var thisFrequency = (frequencyFraction / recognizer.bufferLength) * (recognizer.sampleRate / 2);
             recognizer.frequencies.push(thisFrequency);
 
+            recognizer.decibelSum += max;
+            recognizer.decibelCount++;
+
+            var thisLetter = recognizer.noteFromFrequency(thisFrequency);
+            var thisOctave = recognizer.octaveFromFrequency(thisFrequency);
+
+            recognizer.letters.push(thisLetter);
+            recognizer.octaves.push(thisOctave);
+
             if (recognizer.delay * recognizer.times >= recognizer.timer)
             {
-                if (max > -55)
+                var meanDecibels = recognizer.decibelSum / recognizer.decibelCount;
+
+                if (meanDecibels > -55)
                 {
-                    var letters = [];
-                    var octaves = [];
+                    var modeLetter = recognizer.mode(recognizer.letters);
+                    var modeOctave = recognizer.mode(recognizer.octaves);
 
-                    for (var i = 0; i < recognizer.frequencies.length; i++)
-                    {
-                        var thisLetter = recognizer.noteFromFrequency(recognizer.frequencies[i]);
-                        letters.push(thisLetter);
-
-                        var thisOctave = recognizer.octaveFromFrequency(recognizer.frequencies[i]);
-                        octaves.push(thisOctave);
-                    }
-
-                    var letter = recognizer.findMode(letters);
-                    var octave = recognizer.findMode(octaves);
-
-                    const note = new recognizer.MusicNote(letter, octave, true);
+                    const note = new recognizer.MusicNote(modeLetter, modeOctave, false);
                     recognizer.musicNotes.push(note);
                 }
                 else
                 {
-                    const note = new recognizer.MusicNote("", "", false);
+                    const note = new recognizer.MusicNote("", "", true);
                     recognizer.musicNotes.push(note);
                 }
 
                 recognizer.frequencies = [];
+                recognizer.decibelSum = 0;
+                recognizer.decibelCount = 0;
                 recognizer.times = 0;
             }
 
@@ -160,7 +161,7 @@ class NoteRecognizer
     {
         try
         {
-            var x = colesEquation(frequency);
+            var x = this.colesEquation(frequency);
             var rounded = Math.round(x);
 
             var note = rounded % 12;
@@ -178,7 +179,7 @@ class NoteRecognizer
     {
         try
         {
-            var x = colesEquation(frequency);
+            var x = this.colesEquation(frequency);
             var rounded = Math.round(x);
 
             var inter = rounded / 12;
@@ -196,15 +197,66 @@ class NoteRecognizer
         return 17.31301939 * Math.log(0.06116207 * frequency);
     }
 
-    findMode(arr) 
+    mode(array)
     {
-        return arr.reduce(function(current, item) {
-            var val = current.numMapping[item] = (current.numMapping[item] || 0) + 1;
-            if (val > current.greatestFreq) {
-                current.greatestFreq = val;
-                current.mode = item;
+        if(array.length == 0)
+        {
+            return null;
+        }
+
+        var modeMap = {};
+        var maxEl = array[0], maxCount = 1;
+
+        for(var i = 0; i < array.length; i++)
+        {
+            var el = array[i];
+
+            if(modeMap[el] == null)
+            {
+                modeMap[el] = 1;
             }
-            return current;
-        }, {mode: null, greatestFreq: -Infinity, numMapping: {}}).mode;
+            else
+            {
+                modeMap[el]++;
+            }
+
+            if(modeMap[el] > maxCount)
+            {
+                maxEl = el;
+                maxCount = modeMap[el];
+            }
+        }
+
+        return maxEl;
+    }
+
+    mean(array)
+    {
+        var sum = 0;
+
+        for (var index in array)
+        {
+            sum += array[index];
+        }
+
+        return sum / array.length;
+    }
+
+    largestNum(array)
+    {
+        var max = array[0];
+        var index = 0;
+
+        for (var i in array)
+        {
+            if (array[i] > max)
+            {
+                index = i;
+                max = array[i];
+            }
+        }
+
+        var result = { max: max, index: index };
+        return result;
     }
 }
