@@ -91,6 +91,7 @@ class Metronome
     stopTicking()
     {
         this.ticking = false;
+        
         this.canvas2dContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.reset();
     }
@@ -121,6 +122,7 @@ class Metronome
     reset()
     {
         this.count = 0;
+
         this.x = 0;
         this.y = 0;
     }
@@ -148,7 +150,9 @@ class Metronome
         else if (this.count > this.max)
         {
             this.canvas2dContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
             this.count = 0;
+            
             this.x = 0;
             this.y = 0;
         }
