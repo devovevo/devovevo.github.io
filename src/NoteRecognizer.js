@@ -6,6 +6,24 @@ class NoteRecognizer
     bufferLength = null;
     sampleRate = null;
 
+    musicNotes = [];
+    recognizing = false;
+
+    frequencies = [];
+
+    decibelSum = 0;
+    decibelCount = 0;
+
+    letters = [];
+    octaves = [];
+
+    timer = 200;
+    delay = 10;
+    times = 0;
+
+    octaveList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+    listNote = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
+
     MusicNote = class MusicNote
     {
         note = "";
@@ -19,11 +37,6 @@ class NoteRecognizer
             this.blank = b;
         }
     }
-
-    musicNotes = [];
-    recognizing = false;
-
-    bpm = 0;
 
     constructor()
     {
@@ -42,6 +55,14 @@ class NoteRecognizer
         {
             console.log("Error getting media stream");
         }
+    }
+
+    setDelay(bpm)
+    {
+        var millisecondsPerBeat =  (1 / bpm) * 60 * 1000;
+        var eigthNoteTime = millisecondsPerBeat / 2;
+
+        this.delay = eigthNoteTime;
     }
 
     async getAudioStream()
@@ -79,18 +100,6 @@ class NoteRecognizer
 
         await this.recognizeNotes();
     }
-
-    frequencies = [];
-
-    decibelSum = 0;
-    decibelCount = 0;
-
-    letters = [];
-    octaves = [];
-
-    timer = 200;
-    delay = 10;
-    times = 0;
 
     async recognizeNotes()
     {
@@ -155,8 +164,6 @@ class NoteRecognizer
         this.recognizing = false;
     }
 
-    listNote = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
-
     noteFromFrequency(frequency)
     {
         try
@@ -171,9 +178,6 @@ class NoteRecognizer
         {
         }
     }
-
-    
-    octaveList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
     octaveFromFrequency(frequency)
     {

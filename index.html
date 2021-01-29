@@ -2,18 +2,122 @@
 <html>
 <head>
 <style>
+* {
+  margin: 0 auto;
+}
+body, html {
+   height:100%;
+}
+#drawable {
+   position: absolute;
+   left: 0;
+   top: 0;
+   height:100%; 
+   width:100%;
+}
 #grad1 {
   height: 100%;
-  width: 100%;
   background-color: red; /* For browsers that do not support gradients */
-  background-image: linear-gradient(to right, rgb(216, 9, 164) , rgb(119, 0, 255));
+  background-image: linear-gradient(rgb(212, 0, 255), rgb(89, 0, 255));
+}
+#metronomeButton {
+  position: absolute;
+  padding: 10px;
+  left: 45%;
+  width: 200px;
+  height: 80px;
+  top: 20%;
+  background-color: green;
+  font-size: large;
+}
+#audioButton {
+  position: absolute;
+  padding: 10px;
+  left: 44.4%;
+  width: 230px;
+  height: 40px;
+  top: 28%;
+  background-color: red;
+  font-size: large;
+}
+#bpm {
+  position: absolute;
+  top: 32%;
+  left: 48%;
+  font-size: large;
+  color: whitesmoke;
+}
+#bpmInput {
+  position: absolute;
+  top: 34%;
+  left: 47%;
+  width: 70px;
+  border: 3px solid #73AD21;
+  padding: 10px;
+  background-color: whitesmoke;
 }
 </style>
 </head>
 <body>
 
 <div id="grad1"></div>
+<canvas id="drawable"></canvas>
+
+<button id="metronomeButton" type="button" >Click here for metronome.</button>
+<button id="audioButton" type="button" >Click here to toggle beep.</button>
+<label id="bpm" >BPM:</label>
+<input id="bpmInput" type="text" value="120" >
+
 <script src="src/NoteRecognizer.js" ></script>
+<script src="src/Metronome.js"></script>
+<script>
+  const canvas = document.getElementById("drawable");
+  const ticker = new Metronome(canvas, 0, 0);
+
+  const recognizer = new NoteRecognizer();
+  recognizer.getAudioStream();
+
+  var metronomeButton = document.getElementById("metronomeButton");
+  metronomeButton.addEventListener("click", toggleMetronome);
+
+  var audioButton = document.getElementById("audioButton");
+  audioButton.addEventListener("click", toggleAudio);
+
+  var input = document.getElementById("bpmInput");
+
+  function toggleAudio(click)
+  {
+    if (ticker.noise == true)
+    {
+      ticker.noise = false;
+    }
+    else
+    {
+      ticker.noise = true;
+    }
+  }
+
+  function toggleMetronome(click)
+  {
+    if (ticker.ticking == true)
+    {
+      ticker.stopTicking();
+    }
+    else
+    {
+      try
+      {
+        ticker.setBPM(parseInt(input.value));
+        recognizer.setDelay(parseInt(input.value));
+      }
+      catch (err)
+      {
+      }
+
+      ticker.startTicking();
+    }
+  }
+</script>
 
 </body>
 </html>
