@@ -96,6 +96,7 @@ body, html {
 
   const recognizerCanvas = document.getElementById("recognizerDraw");
   const recognizer = new NoteRecognizer(recognizerCanvas);
+  recognizer.setDelay(parseInt(input.value));
 
   var metronomeButton = document.getElementById("metronomeButton");
   metronomeButton.addEventListener("click", toggleMetronome);
