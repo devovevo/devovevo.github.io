@@ -24,6 +24,25 @@ class NoteRecognizer
     octaveList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
     listNote = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
 
+    canvas = null;
+    canvas2dContext = null;
+
+    drawing = false;
+
+    x = 0;
+    y = 0;
+
+    xOffset = 20;
+    yOffset = 20;
+
+    xSpacing = 50;
+    ySpacing = 30;
+
+    width = 20;
+    height = 20;
+
+    count = 0;
+
     MusicNote = class MusicNote
     {
         note = "";
@@ -38,8 +57,15 @@ class NoteRecognizer
         }
     }
 
-    constructor()
+    constructor(canv)
     {
+        this.canvas = canv;
+
+        if (this.canvas != null)
+        {
+            this.canvas2dContext = this.canvas.getContext("2d");
+            this.drawing = true;
+        }
     }
 
     async getMediaStream(constraints) 
@@ -131,25 +157,34 @@ class NoteRecognizer
             if (recognizer.delay * recognizer.times >= recognizer.timer)
             {
                 var meanDecibels = recognizer.decibelSum / recognizer.decibelCount;
+                var note = null;
 
                 if (meanDecibels > -55)
                 {
                     var modeLetter = recognizer.mode(recognizer.letters);
                     var modeOctave = recognizer.mode(recognizer.octaves);
 
-                    const note = new recognizer.MusicNote(modeLetter, modeOctave, false);
+                    note = new recognizer.MusicNote(modeLetter, modeOctave, false);
                     recognizer.musicNotes.push(note);
                 }
                 else
                 {
-                    const note = new recognizer.MusicNote("", "", true);
+                    note = new recognizer.MusicNote("", "", true);
                     recognizer.musicNotes.push(note);
+                }
+
+                if (this.drawing)
+                {
+                    recognizer.draw(note);
                 }
 
                 recognizer.frequencies = [];
                 recognizer.decibelSum = 0;
                 recognizer.decibelCount = 0;
                 recognizer.times = 0;
+
+                recognizer.letters = [];
+                recognizer.octaves = [];
             }
 
             window.setTimeout(function() {
@@ -262,5 +297,33 @@ class NoteRecognizer
 
         var result = { max: max, index: index };
         return result;
+    }
+
+    draw(note)
+    {
+        if (this.x * this.xSpacing + this.xOffset > this.canvas.width)
+        {
+            this.x = 0;
+            this.y++;
+        }
+
+        if (this.y * this.ySpacing + this.yOffset > this.canvas.height)
+        {
+            this.x = 0;
+            this.y = 0;
+
+            this.canvas2dContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+
+        if (note.blank == true)
+        {
+            this.canvas2dContext.fillText("--", this.x * this.xSpacing + this.xOffset, this.y * this.ySpacing + this.yOffset);
+        }
+        else 
+        {
+            this.canvas2dContext.fillText(note.note + note.octave, this.x * this.xSpacing + this.xOffset, this.y * this.ySpacing + this.yOffset);
+        }
+
+        this.x++;
     }
 }
