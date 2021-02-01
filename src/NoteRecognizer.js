@@ -21,7 +21,7 @@ class NoteRecognizer
     delay = 10;
     times = 0;
 
-    octaveList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+    octaveList = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ];
     listNote = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
 
     canvas = null;
@@ -80,6 +80,7 @@ class NoteRecognizer
         catch(err) 
         {
             console.log("Error getting media stream");
+            return null;
         }
     }
 
@@ -211,6 +212,7 @@ class NoteRecognizer
         }
         catch (err)
         {
+            return null;
         }
     }
 
@@ -228,6 +230,7 @@ class NoteRecognizer
         }
         catch (err)
         {
+            return null;
         }
     }
 
@@ -315,7 +318,7 @@ class NoteRecognizer
             this.canvas2dContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
 
-        if (note.blank == true)
+        if (note.blank == true || note.note == null)
         {
             this.canvas2dContext.fillText("--", this.x * this.xSpacing + this.xOffset, this.y * this.ySpacing + this.yOffset);
         }
