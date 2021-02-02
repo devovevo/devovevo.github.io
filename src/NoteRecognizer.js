@@ -9,9 +9,6 @@ class NoteRecognizer
     musicNotes = [];
     recognizing = false;
 
-    decibelSum = 0;
-    decibelCount = 0;
-
     letters = [];
     octaves = [];
 
@@ -41,8 +38,8 @@ class NoteRecognizer
 
     count = 0;
 
-    minimumDecibels = -50;
-    minimumNoteProportion = 0.999;
+    minimumDecibels = -39;
+    minimumNoteProportion = 0.8;
 
     MusicNote = class MusicNote
     {
@@ -88,11 +85,11 @@ class NoteRecognizer
     setDelay(bpm)
     {
         var millisecondsPerBeat =  (1 / bpm) * 60 * 1000;
-        //var eigthNoteTime = millisecondsPerBeat / 2;
-        var halfNoteTime = millisecondsPerBeat;
+        var eigthNoteTime = millisecondsPerBeat / 2;
+        //var halfNoteTime = millisecondsPerBeat;
 
-        //this.delay = eigthNoteTime;
-        this.delay = halfNoteTime;
+        this.delay = eigthNoteTime;
+        //this.delay = halfNoteTime;
     }
 
     async getAudioStream()
@@ -146,48 +143,49 @@ class NoteRecognizer
             var max = largest.max;
             var frequencyFraction = largest.index;
 
-            var thisFrequency = (frequencyFraction / recognizer.bufferLength) * (recognizer.sampleRate / 2);
-
-            recognizer.decibelSum += max;
-            recognizer.decibelCount++;
-
-            var thisLetter = recognizer.noteFromFrequency(thisFrequency);
-            var thisOctave = recognizer.octaveFromFrequency(thisFrequency);
-
             if (max > this.minimumDecibels)
             {
+                var thisFrequency = (frequencyFraction / recognizer.bufferLength) * (recognizer.sampleRate / 2);
+
+                var thisLetter = recognizer.noteFromFrequency(thisFrequency);
+                var thisOctave = recognizer.octaveFromFrequency(thisFrequency);
+
                 recognizer.letters.push(thisLetter);
                 recognizer.octaves.push(thisOctave);
             }
 
             if (recognizer.delay * recognizer.times >= recognizer.timer)
             {
-                var meanDecibels = recognizer.decibelSum / recognizer.decibelCount;
                 var note = null;
 
-                var modeLetter = recognizer.mode(recognizer.letters);
-                var modeOctave = recognizer.mode(recognizer.octaves);
-
-                var minimumNotes = recognizer.minimumNoteProportion * recognizer.letters.length;
-
-                if (meanDecibels > recognizer.minimumDecibels && modeLetter.count > minimumNotes)
+                try
                 {
-                    note = new recognizer.MusicNote(modeLetter.element, modeOctave.element, false);
-                    recognizer.musicNotes.push(note);
+                    var modeLetter = recognizer.mode(recognizer.letters);
+                    var modeOctave = recognizer.mode(recognizer.octaves);
+
+                    var minimumNotes = recognizer.minimumNoteProportion * recognizer.letters.length;
+
+                    if (modeLetter.count > minimumNotes)
+                    {
+                        note = new recognizer.MusicNote(modeLetter.element, modeOctave.element, false);
+                    }
+                    else
+                    {
+                        note = new recognizer.MusicNote("", "", true);
+                    }
                 }
-                else
+                catch(err)
                 {
                     note = new recognizer.MusicNote("", "", true);
-                    recognizer.musicNotes.push(note);
                 }
+
+                recognizer.musicNotes.push(note);
 
                 if (this.drawing)
                 {
                     recognizer.draw(note);
                 }
 
-                recognizer.decibelSum = 0;
-                recognizer.decibelCount = 0;
                 recognizer.times = 0;
 
                 recognizer.letters = [];
