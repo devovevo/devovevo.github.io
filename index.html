@@ -149,8 +149,13 @@ body, html {
     {
       try
       {
-        ticker.setBPM(parseInt(input.value));
-        recognizer.setDelay(parseInt(input.value));
+        var bpm = parseInt(input.value);
+
+        if (bpm > 5 && bpm < 230)
+        {
+          ticker.setBPM(bpm);
+          recognizer.setDelay(bpm);
+        }
       }
       catch (err)
       {
