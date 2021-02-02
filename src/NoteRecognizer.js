@@ -9,8 +9,6 @@ class NoteRecognizer
     musicNotes = [];
     recognizing = false;
 
-    frequencies = [];
-
     decibelSum = 0;
     decibelCount = 0;
 
@@ -90,9 +88,11 @@ class NoteRecognizer
     setDelay(bpm)
     {
         var millisecondsPerBeat =  (1 / bpm) * 60 * 1000;
-        var eigthNoteTime = millisecondsPerBeat / 2;
+        //var eigthNoteTime = millisecondsPerBeat / 2;
+        var halfNoteTime = millisecondsPerBeat;
 
-        this.delay = eigthNoteTime;
+        //this.delay = eigthNoteTime;
+        this.delay = halfNoteTime;
     }
 
     async getAudioStream()
@@ -147,7 +147,6 @@ class NoteRecognizer
             var frequencyFraction = largest.index;
 
             var thisFrequency = (frequencyFraction / recognizer.bufferLength) * (recognizer.sampleRate / 2);
-            recognizer.frequencies.push(thisFrequency);
 
             recognizer.decibelSum += max;
             recognizer.decibelCount++;
@@ -187,7 +186,6 @@ class NoteRecognizer
                     recognizer.draw(note);
                 }
 
-                recognizer.frequencies = [];
                 recognizer.decibelSum = 0;
                 recognizer.decibelCount = 0;
                 recognizer.times = 0;
