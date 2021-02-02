@@ -18,7 +18,7 @@ class NoteRecognizer
     octaves = [];
 
     timer = 200;
-    delay = 10;
+    delay = 50;
     times = 0;
 
     octaveList = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ];
@@ -42,6 +42,9 @@ class NoteRecognizer
     height = 20;
 
     count = 0;
+
+    minimumDecibels = -50;
+    minimumNoteProportion = 0.999;
 
     MusicNote = class MusicNote
     {
@@ -152,20 +155,25 @@ class NoteRecognizer
             var thisLetter = recognizer.noteFromFrequency(thisFrequency);
             var thisOctave = recognizer.octaveFromFrequency(thisFrequency);
 
-            recognizer.letters.push(thisLetter);
-            recognizer.octaves.push(thisOctave);
+            if (max > this.minimumDecibels)
+            {
+                recognizer.letters.push(thisLetter);
+                recognizer.octaves.push(thisOctave);
+            }
 
             if (recognizer.delay * recognizer.times >= recognizer.timer)
             {
                 var meanDecibels = recognizer.decibelSum / recognizer.decibelCount;
                 var note = null;
 
-                if (meanDecibels > -55)
-                {
-                    var modeLetter = recognizer.mode(recognizer.letters);
-                    var modeOctave = recognizer.mode(recognizer.octaves);
+                var modeLetter = recognizer.mode(recognizer.letters);
+                var modeOctave = recognizer.mode(recognizer.octaves);
 
-                    note = new recognizer.MusicNote(modeLetter, modeOctave, false);
+                var minimumNotes = recognizer.minimumNoteProportion * recognizer.letters.length;
+
+                if (meanDecibels > recognizer.minimumDecibels && modeLetter.count > minimumNotes)
+                {
+                    note = new recognizer.MusicNote(modeLetter.element, modeOctave.element, false);
                     recognizer.musicNotes.push(note);
                 }
                 else
@@ -269,7 +277,12 @@ class NoteRecognizer
             }
         }
 
-        return maxEl;
+        var result = {
+            count: maxCount,
+            element: maxEl
+        };
+
+        return result;
     }
 
     mean(array)
