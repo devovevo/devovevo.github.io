@@ -43,7 +43,7 @@ class NoteRecognizer
 
     count = 0;
 
-    minimumDecibels = -55;
+    minimumDecibels = -50;
     minimumNoteProportion = 0.999;
 
     MusicNote = class MusicNote
