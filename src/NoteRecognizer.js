@@ -38,7 +38,7 @@ class NoteRecognizer
 
     count = 0;
 
-    minimumDecibels = -43;
+    minimumDecibels = -45;
     minimumNoteProportion = 0.8;
 
     MusicNote = class MusicNote
@@ -88,7 +88,7 @@ class NoteRecognizer
         var eigthNoteTime = millisecondsPerBeat / 2;
         //var halfNoteTime = millisecondsPerBeat;
 
-        this.delay = eigthNoteTime;
+        this.delay = eigthNoteTime * 2;
         //this.delay = halfNoteTime;
     }
 
