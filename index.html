@@ -1,194 +1,193 @@
 <!DOCTYPE html>
 <html>
-<head>
-<link rel="devovevoicon" sizes="57x57" href="favicon/apple-icon-57x57.png">
-<link rel="devovevoicon" sizes="60x60" href="favicon/apple-icon-60x60.png">
-<link rel="devovevoicon" sizes="72x72" href="favicon/apple-icon-72x72.png">
-<link rel="devovevoicon" sizes="76x76" href="favicon/apple-icon-76x76.png">
-<link rel="devovevoicon" sizes="114x114" href="favicon/apple-icon-114x114.png">
-<link rel="devovevoicon" sizes="120x120" href="favicon/apple-icon-120x120.png">
-<link rel="devovevoicon" sizes="144x144" href="favicon/apple-icon-144x144.png">
-<link rel="devovevoicon" sizes="152x152" href="favicon/apple-icon-152x152.png">
-<link rel="devovevoicon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-<link rel="manifest" href="favicon/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
-<style>
-* {
-  margin: 0 auto;
-}
-body, html {
-   height: 1500px;
-}
-#metronomeDraw {
-   position: absolute;
-   left: 0;
-   top: 0;
-   height:300px; 
-   width:100%;
-}
-#grad1 {
-  height: 100%;
-  background-color: red; /* For browsers that do not support gradients */
-  background-image: linear-gradient(rgb(212, 0, 255), rgb(89, 0, 255));
-}
-#metronomeButton {
-  position: absolute;
-  padding: 10px;
-  left: 45%;
-  width: 200px;
-  height: 80px;
-  top: 300px;
-  background-color: green;
-  font-size: large;
-}
-#audioButton {
-  position: absolute;
-  padding: 10px;
-  left: 44.4%;
-  width: 230px;
-  height: 40px;
-  top: 410px;
-  background-color: red;
-  font-size: large;
-}
-#bpm {
-  position: absolute;
-  text-align: center;
-  top: 470px;
-  left: 48%;
-  font-size: large;
-  color: whitesmoke;
-}
-#bpmInput {
-  position: absolute;
-  top: 500px;
-  left: 47%;
-  width: 70px;
-  border: 3px solid #73AD21;
-  padding: 10px;
-  background-color: whitesmoke;
-}
-#recognizerButton {
-  position: absolute;
-  padding: 10px;
-  left: 44.4%;
-  width: 230px;
-  height: 60px;
-  top: 650px;
-  background-color: cyan;
-  font-size: large;
-}
-#recognizerDraw {
-   position: absolute;
-   left: 0;
-   top: 710px;
-   height: 790px; 
-   width: 100%;
-}
-</style>
-</head>
-<body>
+  <head>
+    <link rel="devovevoicon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="devovevoicon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="devovevoicon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="devovevoicon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="devovevoicon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="devovevoicon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="devovevoicon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="devovevoicon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="devovevoicon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    
+    <style>
+      * {
+        margin: 0 auto;
+      }
+      body, html {
+        height: 1500px;
+      }
+      #metronomeDraw {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height:300px; 
+        width:100%;
+      }
+      #grad1 {
+        height: 100%;
+        background-color: red; /* For browsers that do not support gradients */
+        background-image: linear-gradient(rgb(212, 0, 255), rgb(89, 0, 255));
+      }
+      #metronomeButton {
+        position: absolute;
+        padding: 10px;
+        left: 45%;
+        width: 200px;
+        height: 80px;
+        top: 300px;
+        background-color: green;
+        font-size: large;
+      }
+      #audioButton {
+        position: absolute;
+        padding: 10px;
+        left: 44.4%;
+        width: 230px;
+        height: 40px;
+        top: 410px;
+        background-color: red;
+        font-size: large;
+      }
+      #bpm {
+        position: absolute;
+        text-align: center;
+        top: 470px;
+        left: 48%;
+        font-size: large;
+        color: whitesmoke;
+      }
+      #bpmInput {
+        position: absolute;
+        top: 500px;
+        left: 47%;
+        width: 70px;
+        border: 3px solid #73AD21;
+        padding: 10px;
+        background-color: whitesmoke;
+      }
+      #recognizerButton {
+        position: absolute;
+        padding: 10px;
+        left: 44.4%;
+        width: 230px;
+        height: 60px;
+        top: 650px;
+        background-color: cyan;
+        font-size: large;
+      }
+      #recognizerDraw {
+        position: absolute;
+        left: 0;
+        top: 710px;
+        height: 790px; 
+        width: 100%;
+      }
+    </style>
+  </head>
 
-<div id="grad1"></div>
-<canvas id="metronomeDraw" inp></canvas>
+  <body>
+    <div id="grad1"></div>
+    <canvas id="metronomeDraw" inp></canvas>
+    <button id="metronomeButton" type="button" >Click here for metronome.</button>
+    <button id="audioButton" type="button" >Click here to toggle beep.</button>
+    <label id="bpm" >BPM:</label>
+    <input id="bpmInput" type="number" value="120" >
+    <button id="recognizerButton" type="button" >Click here to toggle note recognition.</button>
+    <canvas id="recognizerDraw"></canvas>
 
-<button id="metronomeButton" type="button" >Click here for metronome.</button>
-<button id="audioButton" type="button" >Click here to toggle beep.</button>
-<label id="bpm" >BPM:</label>
-<input id="bpmInput" type="number" value="120" >
-<button id="recognizerButton" type="button" >Click here to toggle note recognition.</button>
-<canvas id="recognizerDraw"></canvas>
+    <script src="src/NoteRecognizer.js" ></script>
+    <script src="src/Metronome.js"></script>
+    <script>
 
-<script src="src/NoteRecognizer.js" ></script>
-<script src="src/Metronome.js"></script>
-<script>
+      var input = document.getElementById("bpmInput");
+      
+      const metronomeCanvas = document.getElementById("metronomeDraw");
+      const ticker = new Metronome(metronomeCanvas, 0, 0);
 
-  var input = document.getElementById("bpmInput");
-  
-  const metronomeCanvas = document.getElementById("metronomeDraw");
-  const ticker = new Metronome(metronomeCanvas, 0, 0);
+      const recognizerCanvas = document.getElementById("recognizerDraw");
+      const recognizer = new NoteRecognizer(recognizerCanvas);
+      recognizer.setDelay(parseInt(input.value));
 
-  const recognizerCanvas = document.getElementById("recognizerDraw");
-  const recognizer = new NoteRecognizer(recognizerCanvas);
-  recognizer.setDelay(parseInt(input.value));
+      var metronomeButton = document.getElementById("metronomeButton");
+      metronomeButton.addEventListener("click", toggleMetronome);
 
-  var metronomeButton = document.getElementById("metronomeButton");
-  metronomeButton.addEventListener("click", toggleMetronome);
+      var audioButton = document.getElementById("audioButton");
+      audioButton.addEventListener("click", toggleAudio);
 
-  var audioButton = document.getElementById("audioButton");
-  audioButton.addEventListener("click", toggleAudio);
+      var recognitionButton = document.getElementById("recognizerButton");
+      recognitionButton.addEventListener("click", toggleRecognition);
 
-  var recognitionButton = document.getElementById("recognizerButton");
-  recognitionButton.addEventListener("click", toggleRecognition);
-
-  function toggleAudio(click)
-  {
-    if (ticker.noise == true)
-    {
-      ticker.noise = false;
-    }
-    else
-    {
-      ticker.noise = true;
-    }
-  }
-
-  function toggleMetronome(click)
-  {
-    if (ticker.ticking == true)
-    {
-      ticker.stopTicking();
-    }
-    else
-    {
-      try
+      function toggleAudio(click)
       {
-        var bpm = parseInt(input.value);
-
-        if (bpm > 5 && bpm < 230)
+        if (ticker.noise == true)
         {
-          ticker.setBPM(bpm);
-          recognizer.setDelay(bpm);
+          ticker.noise = false;
+        }
+        else
+        {
+          ticker.noise = true;
         }
       }
-      catch (err)
+
+      function toggleMetronome(click)
       {
-        input.value = "120";
-        var bpm = parseInt(input.value);
-        
-        ticker.setBPM(bpm);
-        recognizer.setDelay(bpm);
-  
+        if (ticker.ticking == true)
+        {
+          ticker.stopTicking();
+        }
+        else
+        {
+          try
+          {
+            var bpm = parseInt(input.value);
+
+            if (bpm > 5 && bpm < 230)
+            {
+              ticker.setBPM(bpm);
+              recognizer.setDelay(bpm);
+            }
+          }
+          catch (err)
+          {
+            input.value = "120";
+            var bpm = parseInt(input.value);
+            
+            ticker.setBPM(bpm);
+            recognizer.setDelay(bpm);
+      
+          }
+
+          ticker.startTicking();
+        }
       }
 
-      ticker.startTicking();
-    }
-  }
-
-  async function toggleRecognition(click)
-  {
-    if (recognizer.recognizing)
-    {
-      recognizer.stopRecognizingNotes();
-    }
-    else
-    {
-      if (recognizer.audioAnalyzer == null)
+      async function toggleRecognition(click)
       {
-        await recognizer.getAudioStream();
+        if (recognizer.recognizing)
+        {
+          recognizer.stopRecognizingNotes();
+        }
+        else
+        {
+          if (recognizer.audioAnalyzer == null)
+          {
+            await recognizer.getAudioStream();
+          }
+
+          recognizer.startRecognizingNotes();
+        }
       }
 
-      recognizer.startRecognizingNotes();
-    }
-  }
-
-</script>
-
-</body>
+    </script>
+  </body>
 </html>
