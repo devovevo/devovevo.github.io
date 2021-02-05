@@ -338,4 +338,25 @@ class NoteRecognizer
 
         this.x++;
     }
+
+    sheetMusicString()
+    {
+        var result = "";
+
+        for (var i = 0; i < this.musicNotes.length; i++)
+        {
+            var note = this.musicNotes[i];
+
+            if (note.blank == true || note.note == null || note.octave == null)
+            {
+                result += "-- ";
+            }
+            else
+            {
+                result += note.note + note.octave + " ";
+            }
+        }
+
+        return result;
+    }
 }

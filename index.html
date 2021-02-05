@@ -85,7 +85,17 @@
       #recognizerButton {
         position: absolute;
         padding: 10px;
-        left: 44.4%;
+        left: 30%;
+        width: 230px;
+        height: 60px;
+        top: 650px;
+        background-color: cyan;
+        font-size: large;
+      }
+      #copyNotesButton {
+        position: absolute;
+        padding: 10px;
+        left: 60%;
         width: 230px;
         height: 60px;
         top: 650px;
@@ -116,6 +126,7 @@
     <input id="bpmInput" type="number" value="120" >
 
     <button id="recognizerButton" type="button" >Click here to toggle note recognition.</button>
+    <button id="copyNotesButton" type="button" >Click here to copy all notes to clipboard.</button>
     <canvas id="recognizerDraw"></canvas>
 
     <script src="src/NoteRecognizer.js" ></script>
@@ -140,6 +151,9 @@
 
       var recognitionButton = document.getElementById("recognizerButton");
       recognitionButton.addEventListener("click", toggleRecognition);
+
+      var copyButton = document.getElementById("copyNotesButton");
+      copyButton.addEventListener("click", copyNotes);
 
       function toggleAudio(click)
       {
@@ -193,13 +207,20 @@
         }
         else
         {
-          if (recognizer.audioAnalyzer == null)
+          if (recognizer.audioAnalyzer == null) 
           {
             await recognizer.getAudioStream();
           }
 
           recognizer.startRecognizingNotes();
         }
+      }
+
+      async function copyNotes(click)
+      {
+        var musicNotes = recognizer.sheetMusicString();
+
+        navigator.clipboard.writeText(musicNotes);
       }
 
     </script>
