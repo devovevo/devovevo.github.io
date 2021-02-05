@@ -38,8 +38,8 @@ class NoteRecognizer
 
     count = 0;
 
-    minimumDecibels = -45;
-    minimumNoteProportion = 0.8;
+    minimumDecibels = -48;
+    minimumNoteProportion = 0.9;
 
     MusicNote = class MusicNote
     {
