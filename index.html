@@ -126,7 +126,7 @@
     <input id="bpmInput" type="number" value="120" >
 
     <button id="recognizerButton" type="button" >Click here to toggle note recognition.</button>
-    <button id="copyNotesButton" type="button" >Click here to copy all notes to clipboard.</button>
+    <button id="copyNotesButton" type="button" >Click here to see all notes.</button>
     <canvas id="recognizerDraw"></canvas>
 
     <script src="src/NoteRecognizer.js" ></script>
@@ -184,6 +184,14 @@
               ticker.setBPM(bpm);
               recognizer.setDelay(bpm);
             }
+            else
+            {
+              input.value = "120";
+              var bpm = parseInt(input.value);
+            
+              ticker.setBPM(bpm);
+              recognizer.setDelay(bpm);
+            }
           }
           catch (err)
           {
@@ -220,7 +228,8 @@
       {
         var musicNotes = recognizer.sheetMusicString();
 
-        navigator.clipboard.writeText(musicNotes);
+        var notePopup = window.open("", "Musc Notes", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=1000");
+        notePopup.document.write(musicNotes);
       }
 
     </script>
