@@ -175,6 +175,15 @@
         }
         else
         {
+          function setTickDefault()
+          {
+            input.value = "120";
+            var bpm = parseInt(input.value);
+            
+            ticker.setBPM(bpm);
+            recognizer.setDelay(bpm);
+          }
+
           try
           {
             var bpm = parseInt(input.value);
@@ -183,27 +192,18 @@
             {
               ticker.setBPM(bpm);
               recognizer.setDelay(bpm);
+
+              ticker.startTicking();
             }
             else
             {
-              input.value = "120";
-              var bpm = parseInt(input.value);
-            
-              ticker.setBPM(bpm);
-              recognizer.setDelay(bpm);
+              setTickDefault();
             }
           }
           catch (err)
           {
-            input.value = "120";
-            var bpm = parseInt(input.value);
-            
-            ticker.setBPM(bpm);
-            recognizer.setDelay(bpm);
-      
+            setTickDefault();
           }
-
-          ticker.startTicking();
         }
       }
 
@@ -228,7 +228,7 @@
       {
         var musicNotes = recognizer.sheetMusicString();
 
-        var notePopup = window.open("", "Musc Notes", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=1000");
+        var notePopup = window.open("", "Music Notes", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=1000,height=1000");
         notePopup.document.write(musicNotes);
       }
 
