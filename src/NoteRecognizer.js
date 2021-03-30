@@ -41,6 +41,9 @@ class NoteRecognizer
     minimumDecibels = -48;
     minimumNoteProportion = 0.9;
 
+    colesRelationFactor = 17.31301939;
+    colesLogarithmicFactor = 0.06116207;
+
     MusicNote = class MusicNote
     {
         note = "";
@@ -240,7 +243,7 @@ class NoteRecognizer
 
     colesEquation(frequency)
     {
-        return 17.31301939 * Math.log(0.06116207 * frequency);
+        return colesRelationFactor * Math.log(colesLogarithmicFactor * frequency);
     }
 
     mode(array)
