@@ -253,32 +253,32 @@ class NoteRecognizer
             return null;
         }
 
-        var modeMap = {};
-        var maxEl = array[0], maxCount = 1;
+        var arrayIndexCount = {};
+        var modeElement = array[0], modeCount = 1;
 
         for(var i = 0; i < array.length; i++)
         {
-            var el = array[i];
+            var currentElement = array[i];
 
-            if(modeMap[el] == null)
+            if(arrayIndexCount[currentElement] == null)
             {
-                modeMap[el] = 1;
+                arrayIndexCount[currentElement] = 1;
             }
             else
             {
-                modeMap[el]++;
+                arrayIndexCount[currentElement]++;
             }
 
-            if(modeMap[el] > maxCount)
+            if(arrayIndexCount[currentElement] > modeCount)
             {
-                maxEl = el;
-                maxCount = modeMap[el];
+                modeElement = currentElement;
+                modeCount = arrayIndexCount[currentElement];
             }
         }
 
         var result = {
-            count: maxCount,
-            element: maxEl
+            count: modeCount,
+            element: modeElement
         };
 
         return result;
