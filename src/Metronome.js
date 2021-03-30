@@ -134,7 +134,7 @@ class Metronome
         }
         else if (this.count <= this.max)
         {
-            var randColor = "#" + this.randomColor();
+            var randColor = "#" + this.randomColorHex();
 
             this.canvas2dContext.fillStyle = randColor;
             this.canvas2dContext.fillRect(this.xSpacing * this.x + this.xOffset, this.y * this.ySpacing + this.yOffset, this.barWidth, this.barHeight);
@@ -158,8 +158,8 @@ class Metronome
         }
     }
 
-    randomColor()
+    randomColorHex()
     {
-        return Math.floor(Math.random()*16777215).toString(16);
+        return Math.floor(Math.random() * 16777215).toString(16);
     }
 }
