@@ -149,9 +149,10 @@ class NoteRecognizer
             if (max > this.minimumDecibels)
             {
                 var thisFrequency = (frequencyFraction / recognizer.bufferLength) * (recognizer.sampleRate / 2);
-
-                var thisLetter = recognizer.noteFromFrequency(thisFrequency);
-                var thisOctave = recognizer.octaveFromFrequency(thisFrequency);
+                var thisNoteAndOctave = recognizer.noteAndOctaveFromFrequency(thisFrequency);
+                      
+                var thisLetter = thisNoteAndOctave.note;
+                var thisOctave = thisNoteAndOctave.octave;
 
                 recognizer.letters.push(thisLetter);
                 recognizer.octaves.push(thisOctave);
@@ -163,8 +164,8 @@ class NoteRecognizer
 
                 try
                 {
-                    var modeLetter = recognizer.mode(recognizer.letters);
-                    var modeOctave = recognizer.mode(recognizer.octaves);
+                    var modeLetter = mode(recognizer.letters);
+                    var modeOctave = mode(recognizer.octaves);
 
                     var minimumNotes = recognizer.minimumNoteProportion * recognizer.letters.length;
 
@@ -207,33 +208,24 @@ class NoteRecognizer
         this.recognizing = false;
     }
 
-    noteFromFrequency(frequency)
+    noteAndOctaveFromFrequency(frequency)
     {
         try
         {
             var x = this.colesEquation(frequency);
             var rounded = Math.round(x);
 
-            var note = rounded % 12;
-            return this.listNote[note];
-        }
-        catch (err)
-        {
-            return null;
-        }
-    }
-
-    octaveFromFrequency(frequency)
-    {
-        try
-        {
-            var x = this.colesEquation(frequency);
-            var rounded = Math.round(x);
+            var returnedNote = rounded % 12;
 
             var inter = rounded / 12;
-            var octave = Math.floor(inter);
+            var returnedOctave = Math.floor(inter);
 
-            return this.octaveList[octave];
+            var returnedData = {
+              note: this.noteList[returnedNote],
+              octave: this.octaveList[returnedOctave],
+            }
+            
+            return returnedData;
         }
         catch (err)
         {
@@ -244,74 +236,6 @@ class NoteRecognizer
     colesEquation(frequency)
     {
         return colesRelationFactor * Math.log(colesLogarithmicFactor * frequency);
-    }
-
-    mode(array)
-    {
-        if(array.length == 0)
-        {
-            return null;
-        }
-
-        var arrayIndexCount = {};
-        var modeElement = array[0], modeCount = 1;
-
-        for(var i = 0; i < array.length; i++)
-        {
-            var currentElement = array[i];
-
-            if(arrayIndexCount[currentElement] == null)
-            {
-                arrayIndexCount[currentElement] = 1;
-            }
-            else
-            {
-                arrayIndexCount[currentElement]++;
-            }
-
-            if(arrayIndexCount[currentElement] > modeCount)
-            {
-                modeElement = currentElement;
-                modeCount = arrayIndexCount[currentElement];
-            }
-        }
-
-        var result = {
-            count: modeCount,
-            element: modeElement
-        };
-
-        return result;
-    }
-
-    mean(array)
-    {
-        var sum = 0;
-
-        for (var index in array)
-        {
-            sum += array[index];
-        }
-
-        return sum / array.length;
-    }
-
-    largestNum(array)
-    {
-        var max = array[0];
-        var index = 0;
-
-        for (var i in array)
-        {
-            if (array[i] > max)
-            {
-                index = i;
-                max = array[i];
-            }
-        }
-
-        var result = { max: max, index: index };
-        return result;
     }
 
     draw(note)
