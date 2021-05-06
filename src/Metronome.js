@@ -14,12 +14,8 @@ class Metronome
     count = 0;
     max = 4;
 
-    x = 0;
-
     xOffset = 20;
     xSpacing = 75;
-
-    y = 0;
 
     yOffset = 30;
     ySpacing = 20;
