@@ -44,6 +44,18 @@ class NoteRecognizer
     colesRelationFactor = 17.31301939;
     colesLogarithmicFactor = 0.06116207;
 
+    audioInputConstraints = 
+    {
+        audio: {
+            "mandatory": {
+                "googEchoCancellation": "true",
+                "googAutoGainControl": "true",
+                "googNoiseSuppression": "true",
+                "googHighpassFilter": "true"
+            }
+        }
+    };
+
     MusicNote = class MusicNote
     {
         note = "";
@@ -98,19 +110,7 @@ class NoteRecognizer
     async getAudioStream()
     {
         var recognizer = this;
-        var constraints = 
-        {
-            audio: {
-                "mandatory": {
-                    "googEchoCancellation": "true",
-                    "googAutoGainControl": "true",
-                    "googNoiseSuppression": "true",
-                    "googHighpassFilter": "true"
-                }
-            }
-        };
-
-        recognizer.audioStream = await recognizer.getMediaStream(constraints);
+        recognizer.audioStream = await recognizer.getMediaStream(recognizer.audioInputConstraints);
         
         var audioContext = new (window.AudioContext || window.webkitAudioContext)();
         recognizer.audioAnalyzer = audioContext.createAnalyser();
