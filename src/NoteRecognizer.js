@@ -17,7 +17,7 @@ class NoteRecognizer
     times = 0;
 
     octaveList = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ];
-    listNote = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
+    noteList = [ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" ];
 
     canvas = null;
     canvas2dContext = null;
@@ -38,7 +38,7 @@ class NoteRecognizer
 
     count = 0;
 
-    minimumDecibels = -48;
+    minimumDecibels = -60;
     minimumNoteProportion = 0.9;
 
     colesRelationFactor = 17.31301939;
@@ -142,7 +142,7 @@ class NoteRecognizer
 
             recognizer.audioAnalyzer.getFloatFrequencyData(dataArray);
 
-            var largest = recognizer.largestNum(dataArray);
+            var largest = largestNum(dataArray);
             var max = largest.max;
             var frequencyFraction = largest.index;
 
@@ -160,7 +160,7 @@ class NoteRecognizer
 
             if (recognizer.delay * recognizer.times >= recognizer.timer)
             {
-                var note = null;
+                var note = new recognizer.MusicNote("", "", true);
 
                 try
                 {
@@ -173,14 +173,9 @@ class NoteRecognizer
                     {
                         note = new recognizer.MusicNote(modeLetter.element, modeOctave.element, false);
                     }
-                    else
-                    {
-                        note = new recognizer.MusicNote("", "", true);
-                    }
                 }
                 catch(err)
                 {
-                    note = new recognizer.MusicNote("", "", true);
                 }
 
                 recognizer.musicNotes.push(note);
@@ -229,13 +224,18 @@ class NoteRecognizer
         }
         catch (err)
         {
-            return null;
+            var returnedData = {
+                note: null,
+                octave: null,
+            };
+
+            return returnedData;
         }
     }
 
     colesEquation(frequency)
     {
-        return colesRelationFactor * Math.log(colesLogarithmicFactor * frequency);
+        return this.colesRelationFactor * Math.log(this.colesLogarithmicFactor * frequency);
     }
 
     draw(note)
